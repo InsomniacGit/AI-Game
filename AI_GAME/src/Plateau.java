@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Plateau implements I_plateau{
     Case[] cases;
@@ -104,8 +105,9 @@ public class Plateau implements I_plateau{
         }
     }
 
-    public boolean affamer(Joueur joueur_current, Joueur joueur_precedent){
+    public List<String> liste_coup_possible(Joueur joueur_current){
         List<String> liste_coup_possible = new ArrayList<String>();
+
         if(joueur_current.consulter_id() == 1){
             if(coup_possible("1B")){
                 liste_coup_possible.add("1B");
@@ -154,18 +156,6 @@ public class Plateau implements I_plateau{
             }
             if(coup_possible("15R")){
                 liste_coup_possible.add("15R");
-            }
-
-            if (liste_coup_possible.size() == 0){
-                joueur_precedent.score += graines_restantes();
-                actualisation_graine_restante(graines_restantes());
-                for(int i=0; i<this.taille_plateau; i++){
-                    this.cases[i].retirer_toutes_graines();
-                }
-                return true;
-            }
-            else{
-                return false;
             }
         }
         else{
@@ -217,18 +207,25 @@ public class Plateau implements I_plateau{
             if(coup_possible("16R")){
                 liste_coup_possible.add("16R");
             }
+        }
 
-            if (liste_coup_possible.size() == 0){
-                joueur_precedent.score += graines_restantes();
-                actualisation_graine_restante(graines_restantes());
-                for(int i=0; i<this.taille_plateau; i++){
-                    this.cases[i].retirer_toutes_graines();
-                }
-                return true;
+        return liste_coup_possible;
+    }
+
+    public boolean affamer(Joueur joueur_current, Joueur joueur_precedent){
+
+        List<String> liste_coup_possible = liste_coup_possible(joueur_current);
+
+        if (liste_coup_possible.size() == 0){
+            joueur_precedent.score += graines_restantes();
+            actualisation_graine_restante(graines_restantes());
+            for(int i=0; i<this.taille_plateau; i++){
+                this.cases[i].retirer_toutes_graines();
             }
-            else {
-                return false;
-            }
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -270,7 +267,31 @@ public class Plateau implements I_plateau{
                     System.out.print(joueur_current.consulter_nom() + " - Ton coup n'est pas valide, choisis-en un autre!\n");
                 }
             }
+
             int derniere_semance;
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateur(Joueur joueur_current, Joueur joueur_precedent) {
+        String coup = "";
+        List<String> liste_coup_possible;
+        int derniere_semance;
+        int nombre_coup;
+        int nombreAleatoire;
+        Random rand;
+
+        if (!affamer(joueur_current, joueur_precedent)) {
+            liste_coup_possible = liste_coup_possible(joueur_current);
+            nombre_coup = liste_coup_possible.size();
+
+            rand = new Random();
+            nombreAleatoire = rand.nextInt(nombre_coup);
+            coup = liste_coup_possible.get(nombreAleatoire);
+
+            System.out.print("Ordinateur" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+
             derniere_semance = semer(coup);
             capturer(derniere_semance, joueur_current);
         }

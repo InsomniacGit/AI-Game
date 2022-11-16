@@ -22,7 +22,20 @@ public class Main {
         while(plateau.partie_non_finie(joueurs[0].consulter_score(), joueurs[1].consulter_score())){
 
             Joueur joueur_current = joueurs[numCoup%2];
-            plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
+
+            // Mode 1v1
+            // plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
+
+            // Mode Ordinateur vs Ordinateur
+            // plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
+
+            // Mode 1 contre Ordinateur
+            if(joueur_current.consulter_id() == 1){
+                plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
+            }
+            else{
+                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
+            }
 
             if(DEBUG) plateau.afficher(joueurs);
 
