@@ -1,5 +1,35 @@
 public class Main {
+    static final int NB_JOUEURS = 2;
+    static final int NB_CASES = 16;
+    static final boolean DEBUG = true;
+
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        // Initialisation des joueurs
+        Joueur[] joueurs = new Joueur[NB_JOUEURS];
+        for(int k = 0; k < NB_JOUEURS; k++){
+            Joueur j = new Joueur("player" + (k+1), 0, k+1);
+            joueurs[k] = j;
+        }
+
+        // Initialisation du plateau
+        Plateau plateau = new Plateau(NB_CASES);
+        plateau.init_plateau();
+
+        if(DEBUG) plateau.afficher(joueurs);
+
+        // Début de la partie
+        int numCoup = 0;
+        while(plateau.partie_non_finie(joueurs[0].consulter_score(), joueurs[1].consulter_score())){
+
+            Joueur joueur_current = joueurs[numCoup%2];
+            plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
+
+            if(DEBUG) plateau.afficher(joueurs);
+
+            numCoup++;
+        }
+
+        // Afficher vainqueur
+        plateau.connaitre_vainqueur(joueurs[0], joueurs[1]);
     }
 }
