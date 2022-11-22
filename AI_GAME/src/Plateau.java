@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Plateau implements I_plateau{
     public static final String ANSI_RED = "\u001B[31m";
@@ -25,6 +23,13 @@ public class Plateau implements I_plateau{
         for(int i=0; i<this.taille_plateau; i++){
             this.cases[i] = new Case(2,2);
         }
+    }
+    public void init_plateau(Plateau p){
+        for(int i=0; i<this.taille_plateau; i++){
+            this.cases[i].ajouter_graines(p.cases[i].nombre_graines_bleues(), p.cases[i].nombre_graines_rouges());
+        }
+        this.partie_en_cours = p.partie_en_cours;
+        this.nombres_graines_restante = p.connaitre_graines_restantes();
     }
 
     public void capturer(int index_case, Joueur joueur_courant){
@@ -223,6 +228,57 @@ public class Plateau implements I_plateau{
             System.out.printf("Egalité, les joueurs " + j1.consulter_nom() + " et " + j2.consulter_nom() + " finissent la partie avec un score de %d", j1.consulter_score());
         }
     }
+
+    public String minCoup(Map<String, Integer> tab){
+        int val = Integer.MAX_VALUE;
+        String ind = "";
+
+        for(String m : tab.keySet()){
+            if(val > tab.get(m)){
+                val = tab.get(m);
+                ind = m;
+            }
+        }
+        return ind;
+    }
+
+    public String maxCoup(Map<String, Integer> tab){
+        int val = Integer.MIN_VALUE;
+        String ind = "";
+
+        for(String m : tab.keySet()){
+            if(val < tab.get(m)){
+                val = tab.get(m);
+                ind = m;
+            }
+        }
+        return ind;
+    }
+
+    public int MinMaxValue(Plateau e, Joueur[] J, Joueur Jcurrent, boolean isMax, int pmax){
+        // TO DO
+        return 0;
+    }
+
+    public String DecisionMinMax (Plateau e, Joueur[] J, Joueur Jcurrent, int pmax) {
+        Map<String, Integer> value = new Hashtable<>();
+        int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
+        // Decide the best move of J in position e
+        for(String m : e.liste_coup_possible(Jcurrent)){
+            Plateau p = new Plateau(this.taille_plateau);
+            p.init_plateau(e); // copie dure du plateau e
+            p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
+            value.put(m, MinMaxValue(p, J, Jcurrent, false, pmax));
+        }
+
+        if(Jcurrent.consulter_id() == 1){
+            return maxCoup(value);
+        } else {
+            return minCoup(value);
+        }
+    }
+
+
 
     public void afficher(Joueur[] joueurs){
         System.out.print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");

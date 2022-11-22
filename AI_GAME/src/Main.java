@@ -27,7 +27,7 @@ public class Main {
             /**plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);*/
 
             // Mode Ordinateur vs Ordinateur
-            /**plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);*/
+            /**plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);*/
 
             // Mode 1 contre Ordinateur
             if(joueur_current.consulter_id() == 1){
@@ -44,7 +44,7 @@ public class Main {
                 plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
             else{
-                plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
+                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
             }
              */
 
