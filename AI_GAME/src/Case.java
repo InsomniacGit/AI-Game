@@ -1,6 +1,6 @@
 public class Case implements I_case{
-    int graines_bleus;
-    int graines_rouges;
+    public int graines_bleus;
+    public int graines_rouges;
 
     public Case(int graines_B, int graines_R){
         this.graines_bleus = graines_B;
@@ -8,15 +8,10 @@ public class Case implements I_case{
     }
 
     public boolean est_vide(){
-        if(this.graines_bleus == 0 && this.graines_rouges == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return this.graines_bleus == 0 && this.graines_rouges == 0;
     }
 
-    public int nombre_graines_bleus(){
+    public int nombre_graines_bleues(){
         return this.graines_bleus;
     }
 
@@ -34,12 +29,10 @@ public class Case implements I_case{
     }
 
     public void retirer_graines(int graines_bleus, int graines_rouges){
-        this.graines_bleus -= graines_bleus;
-        this.graines_rouges -= graines_rouges;
+        ajouter_graines(-1 * graines_bleus,-1 * graines_rouges);
     }
 
     public void retirer_toutes_graines(){
-        this.graines_bleus = 0;
-        this.graines_rouges = 0;
+        retirer_graines(this.nombre_graines_bleues(), this.nombre_graines_rouges());
     }
 }
