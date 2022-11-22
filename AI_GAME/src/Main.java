@@ -34,7 +34,7 @@ public class Main {
                 plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
             else{
-                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
+                plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
             }
 
 
@@ -44,7 +44,7 @@ public class Main {
                 plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
             else{
-                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
+                plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
             }
              */
 

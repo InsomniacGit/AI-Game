@@ -179,7 +179,7 @@ public class Plateau implements I_plateau{
         }
     }
 
-    public void ordinateur(Joueur joueur_current, Joueur joueur_precedent) {
+    public void ordinateurNaif(Joueur joueur_current, Joueur joueur_precedent) {
         String coup;
         List<String> liste_coup_possible;
         int derniere_semance;

@@ -16,7 +16,7 @@ public interface I_plateau {
     /** Tour de jeu du joueur courant */
     void jouer(Joueur joueur_current, Joueur joueur_precedent);
     /** Tour de jeu du joueur courant s'il s'agit d'un bot */
-    void ordinateur(Joueur joueur_current, Joueur joueur_precedent);
+    void ordinateurNaif(Joueur joueur_current, Joueur joueur_precedent);
     /** Mise à jour des graines restantes sur le plateau */
     void actualisation_graines_restantes(int nombre_graine_capture);
     /** Connaitre le nombre de graines encore en jeu */
