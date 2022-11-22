@@ -1,4 +1,5 @@
 public class Main {
+    // COUCOU
     public static final int NB_JOUEURS = 2;
     public static final int NB_CASES = 16;
     public static final boolean DEBUG = true;
