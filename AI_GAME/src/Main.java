@@ -37,6 +37,17 @@ public class Main {
                 plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
             }
 
+
+            // Mode Ordinateur contre 1
+            /**
+            if(joueur_current.consulter_id() == 2){
+                plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
+            }
+            else{
+                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
+            }
+             */
+
             if(DEBUG) plateau.afficher(joueurs);
 
             numCoup++;
