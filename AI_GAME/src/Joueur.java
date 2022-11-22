@@ -1,16 +1,23 @@
 public class Joueur implements I_joueur{
-    String nom;
-    int score;
+    public int score;
+    private final String nom;
+    private final int id;
 
-    public Joueur(String n, int s){
+    public Joueur(String n, int s, int id){
         this.nom = n;
         this.score = s;
+        this.id = id;
     }
 
-    int consulter_score(){
-
+    public int consulter_score(){
+        return this.score;
     }
-    String consulter_nom(){
 
+    public String consulter_nom(){
+        return this.nom;
+    }
+
+    public int consulter_id(){
+        return this.id;
     }
 }
