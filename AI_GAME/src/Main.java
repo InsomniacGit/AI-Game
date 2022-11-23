@@ -19,46 +19,39 @@ public class Main {
 
         // Début de la partie
         int numCoup = 0;
-        while(plateau.etat_partie(joueurs[0].consulter_score(), joueurs[1].consulter_score())){
+
+        while(plateau.etat_enCours(joueurs[0].consulter_score(), joueurs[1].consulter_score())){
 
             Joueur joueur_current = joueurs[numCoup%2];
 
             // Mode 1v1
             /**plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);*/
 
-            // Mode Ordinateur vs Ordinateur
+            // Mode OrdinateurNaif vs OrdinateurNaif
             /**plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);*/
 
-            // Mode 1 contre Ordinateur
-            /**if(joueur_current.consulter_id() == 1){
+            // Mode 1 contre OrdinateurNaif
+            /**if(joueur_current.consulter_id() == 1){      // 1 pour jouer en premier, 2 en deuxième
                 plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
             else{
                 plateau.ordinateurMinMax1(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
             }*/
 
-            // Mode Ordinateur vs Ordinateur
-            if(joueur_current.consulter_id() == 2){
+            // Mode OrdinateurMinMax1 vs OrdinateurNaif
+            if(joueur_current.consulter_id() == 2){ // Si ==2, alors joueur2, sinon joueur1
+                plateau.ordinateurMinMax2(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+            }
+            else{
                 plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
             }
-            else{
-                plateau.ordinateurMinMax1(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
-            }
 
-            // Mode Ordinateur contre 1
-            /**
-            if(joueur_current.consulter_id() == 2){
-                plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
-            }
-            else{
-                plateau.ordinateur(joueur_current, joueurs[(numCoup+1)%2]);
-            }
-             */
 
             if(DEBUG) plateau.afficher(joueurs);
 
             numCoup++;
         }
+
 
         // Afficher vainqueur
         plateau.connaitre_vainqueur(joueurs[0], joueurs[1]);

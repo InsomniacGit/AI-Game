@@ -22,7 +22,7 @@ public interface I_plateau {
     /** Connaitre le nombre de graines encore en jeu */
     int connaitre_graines_restantes();
     /** Connaitre l'état de la partie */
-    boolean etat_partie(int score_J1, int score_J2);
+    boolean etat_enCours(int score_J1, int score_J2);
     /** Connaitre résultat de la partie */
     void connaitre_vainqueur(Joueur j1, Joueur j2);
     /** Afficher le plateau de jeu */

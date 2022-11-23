@@ -200,7 +200,7 @@ public class Plateau implements I_plateau{
             nombreAleatoire = rand.nextInt(nombre_coup);
             coup = liste_coup_possible.get(nombreAleatoire);
 
-            System.out.print("Ordinateur" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            System.out.print("Naif" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
 
             derniere_semance = semer(coup);
             capturer(derniere_semance, joueur_current);
@@ -215,7 +215,7 @@ public class Plateau implements I_plateau{
         return this.nombres_graines_restante;
     }
 
-    public boolean etat_partie(int score_J1, int score_J2){
+    public boolean etat_enCours(int score_J1, int score_J2){
         return score_J1 <= 32 && score_J2 <= 32 && this.connaitre_graines_restantes() >= 8;
     }
 
@@ -277,15 +277,9 @@ public class Plateau implements I_plateau{
         return val;
     }
 
-    public int h(Plateau e, Joueur[] J, Joueur Jcurrent){
-        Joueur Jopponent;
-        if (J[0].consulter_id() != Jcurrent.consulter_id()){
-            Jopponent = J[0];
-        } else {
-            Jopponent = J[1];
-        }
+    public int evaluation(Plateau e, Joueur[] J){ // h method
 
-        return (Jcurrent.consulter_score() - Jopponent.consulter_score());
+        return (J[0].consulter_score() - J[1].consulter_score());
     }
 
     public int MinMaxValue(Plateau e, Joueur[] J, Joueur Jcurrent, boolean isMax, int pmax){
@@ -298,26 +292,32 @@ public class Plateau implements I_plateau{
             Jopponent = J[1];
         }
 
-        if(e.etat_partie(Jcurrent.consulter_score(), Jopponent.consulter_score())){
-            if (Jcurrent.consulter_score() > Jopponent.consulter_score()) return Jcurrent.consulter_score();
-            if (Jcurrent.consulter_score() < Jopponent.consulter_score()) return -(Jopponent.consulter_score());
-            return 0;
+        if(!e.etat_enCours(J[0].consulter_score(), J[1].consulter_score())){
+            if (J[0].consulter_score() > J[1].consulter_score()) return 1000-pmax;
+            if (J[0].consulter_score() < J[1].consulter_score()) return -1000+pmax;
+            if (J[0].consulter_score() == J[1].consulter_score()) return 0;
         }
 
-        if (pmax == 0) return h(e, J, Jcurrent);
+        if ((pmax == 0) && (e.etat_enCours(J[0].consulter_score(), J[1].consulter_score()))) return evaluation(e, J);
 
         ArrayList<Integer> vals = new ArrayList<>();
         for(String m : e.liste_coup_possible(Jcurrent)){
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
-            vals.add(MinMaxValue(p, J, Jcurrent, !(isMax), pmax-1));
+            vals.add(MinMaxValue(p, J, Jopponent, !(isMax), pmax-1));
 
             // Rétablir le score des joueurs dans ce contexte
             J[0].score = scoreState[0];
             J[1].score = scoreState[1];
-            if(Jcurrent.consulter_id() == J[0].consulter_id()){ Jcurrent.score = J[0].consulter_score(); Jopponent.score = J[1].consulter_score(); }
-            else { Jcurrent.score = J[1].consulter_score(); Jopponent.score = J[0].consulter_score(); }
+            if(Jcurrent.consulter_id() == J[0].consulter_id()){
+                Jcurrent.score = J[0].consulter_score();
+                Jopponent.score = J[1].consulter_score();
+            }
+            else {
+                Jcurrent.score = J[1].consulter_score();
+                Jopponent.score = J[0].consulter_score();
+            }
         }
 
         if(isMax){
@@ -331,9 +331,19 @@ public class Plateau implements I_plateau{
         Map<String, Integer> value = new Hashtable<>();
         int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
 
+        Joueur Jopponent;
+        boolean isMax;
+
+        if (J[0].consulter_id() != Jcurrent.consulter_id()){
+            Jopponent = J[0];
+            isMax = false;
+        } else {
+            Jopponent = J[1];
+            isMax = true;
+        }
 
         // Decide the best move of J in position e
-        System.out.println("cp := " + e.liste_coup_possible(Jcurrent).size());
+        System.out.println("cp := " + e.liste_coup_possible(Jcurrent));
         if(e.liste_coup_possible(Jcurrent).size() == 1){
             return e.liste_coup_possible(Jcurrent).get(0);
         }
@@ -341,7 +351,7 @@ public class Plateau implements I_plateau{
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
-            value.put(m, MinMaxValue(p, J, Jcurrent, false, pmax));
+            value.put(m, MinMaxValue(p, J, Jopponent, isMax, pmax));
 
             // Rétablir le score des joueurs dans ce contexte
             J[0].score = scoreState[0];
@@ -362,12 +372,26 @@ public class Plateau implements I_plateau{
         int derniere_semance;
 
         if (est_affame(joueur_current, joueur_precedent)) {
-            coup = DecisionMinMax(this, J, joueur_current, 10001);
-            System.out.print("Ordinateur" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            coup = DecisionMinMax(this, J, joueur_current, 1);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
             derniere_semance = semer(coup);
             capturer(derniere_semance, joueur_current);
         }
     }
+
+    public void ordinateurMinMax2(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 2);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+
 
 
     public void afficher(Joueur[] joueurs){
