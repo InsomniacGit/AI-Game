@@ -227,6 +227,7 @@ public class Plateau implements I_plateau{
         } else {
             System.out.printf("Egalité, les joueurs " + j1.consulter_nom() + " et " + j2.consulter_nom() + " finissent la partie avec un score de %d", j1.consulter_score());
         }
+        System.out.println("\n\n\n\n\n");
     }
 
     public String minCoup(Map<String, Integer> tab){
@@ -293,8 +294,8 @@ public class Plateau implements I_plateau{
         }
 
         if(!e.etat_enCours(J[0].consulter_score(), J[1].consulter_score())){
-            if (J[0].consulter_score() > J[1].consulter_score()) return 1000-pmax;
-            if (J[0].consulter_score() < J[1].consulter_score()) return -1000+pmax;
+            if (J[0].consulter_score() > J[1].consulter_score()) return 1000+pmax;
+            if (J[0].consulter_score() < J[1].consulter_score()) return -1000-pmax;
             if (J[0].consulter_score() == J[1].consulter_score()) return 0;
         }
 
@@ -343,7 +344,7 @@ public class Plateau implements I_plateau{
         }
 
         // Decide the best move of J in position e
-        System.out.println("cp := " + e.liste_coup_possible(Jcurrent));
+        System.out.println("nb := " + e.liste_coup_possible(Jcurrent).size() + " \t cp := " + e.liste_coup_possible(Jcurrent));
         if(e.liste_coup_possible(Jcurrent).size() == 1){
             return e.liste_coup_possible(Jcurrent).get(0);
         }
@@ -391,6 +392,153 @@ public class Plateau implements I_plateau{
         }
     }
 
+    public void ordinateurMinMax3(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 3);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax4(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 4);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax5(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 5);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax6(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 6);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax7(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 7);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax8(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 8);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax9(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 9);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMax10(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 10);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurMinMaxAdaptatif(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+
+        if(this.liste_coup_possible(joueur_current).size() <= 1){
+            this.ordinateurMinMax10(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 2){
+            this.ordinateurMinMax9(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 3){
+            this.ordinateurMinMax9(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 4){
+            this.ordinateurMinMax8(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 5){
+            this.ordinateurMinMax8(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 6){
+            this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 7){
+            this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 8){
+            this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 9){
+            this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 10){
+            this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 11){
+            this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 12){
+            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 13){
+            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 14){
+            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 15){
+            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 16){
+            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+    }
 
 
 
