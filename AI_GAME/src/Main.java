@@ -30,13 +30,20 @@ public class Main {
             /**plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);*/
 
             // Mode 1 contre Ordinateur
-            if(joueur_current.consulter_id() == 1){
+            /**if(joueur_current.consulter_id() == 1){
                 plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
             else{
+                plateau.ordinateurMinMax1(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+            }*/
+
+            // Mode Ordinateur vs Ordinateur
+            if(joueur_current.consulter_id() == 2){
                 plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
             }
-
+            else{
+                plateau.ordinateurMinMax1(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+            }
 
             // Mode Ordinateur contre 1
             /**

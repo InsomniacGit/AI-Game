@@ -26,7 +26,7 @@ public class Plateau implements I_plateau{
     }
     public void init_plateau(Plateau p){
         for(int i=0; i<this.taille_plateau; i++){
-            this.cases[i].ajouter_graines(p.cases[i].nombre_graines_bleues(), p.cases[i].nombre_graines_rouges());
+            this.cases[i] = new Case(p.cases[i].nombre_graines_bleues(), p.cases[i].nombre_graines_rouges());
         }
         this.partie_en_cours = p.partie_en_cours;
         this.nombres_graines_restante = p.connaitre_graines_restantes();
@@ -242,6 +242,17 @@ public class Plateau implements I_plateau{
         return ind;
     }
 
+    public int minInArray(ArrayList<Integer> tab){
+        int val = Integer.MAX_VALUE;
+
+        for(int m : tab){
+            if(val > m){
+                val = m;
+            }
+        }
+        return val;
+    }
+
     public String maxCoup(Map<String, Integer> tab){
         int val = Integer.MIN_VALUE;
         String ind = "";
@@ -255,20 +266,88 @@ public class Plateau implements I_plateau{
         return ind;
     }
 
+    public int maxInArray(ArrayList<Integer> tab){
+        int val = Integer.MIN_VALUE;
+
+        for(int m : tab){
+            if(val < m){
+                val = m;
+            }
+        }
+        return val;
+    }
+
+    public int h(Plateau e, Joueur[] J, Joueur Jcurrent){
+        Joueur Jopponent;
+        if (J[0].consulter_id() != Jcurrent.consulter_id()){
+            Jopponent = J[0];
+        } else {
+            Jopponent = J[1];
+        }
+
+        return (Jcurrent.consulter_score() - Jopponent.consulter_score());
+    }
+
     public int MinMaxValue(Plateau e, Joueur[] J, Joueur Jcurrent, boolean isMax, int pmax){
-        // TO DO
-        return 0;
+        int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
+
+        Joueur Jopponent;
+        if (J[0].consulter_id() != Jcurrent.consulter_id()){
+            Jopponent = J[0];
+        } else {
+            Jopponent = J[1];
+        }
+
+        if(e.etat_partie(Jcurrent.consulter_score(), Jopponent.consulter_score())){
+            if (Jcurrent.consulter_score() > Jopponent.consulter_score()) return Jcurrent.consulter_score();
+            if (Jcurrent.consulter_score() < Jopponent.consulter_score()) return -(Jopponent.consulter_score());
+            return 0;
+        }
+
+        if (pmax == 0) return h(e, J, Jcurrent);
+
+        ArrayList<Integer> vals = new ArrayList<>();
+        for(String m : e.liste_coup_possible(Jcurrent)){
+            Plateau p = new Plateau(this.taille_plateau);
+            p.init_plateau(e); // copie dure du plateau e
+            p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
+            vals.add(MinMaxValue(p, J, Jcurrent, !(isMax), pmax-1));
+
+            // Rétablir le score des joueurs dans ce contexte
+            J[0].score = scoreState[0];
+            J[1].score = scoreState[1];
+            if(Jcurrent.consulter_id() == J[0].consulter_id()){ Jcurrent.score = J[0].consulter_score(); Jopponent.score = J[1].consulter_score(); }
+            else { Jcurrent.score = J[1].consulter_score(); Jopponent.score = J[0].consulter_score(); }
+        }
+
+        if(isMax){
+            return maxInArray(vals);
+        } else {
+            return minInArray(vals);
+        }
     }
 
     public String DecisionMinMax (Plateau e, Joueur[] J, Joueur Jcurrent, int pmax) {
         Map<String, Integer> value = new Hashtable<>();
         int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
+
+
         // Decide the best move of J in position e
+        System.out.println("cp := " + e.liste_coup_possible(Jcurrent).size());
+        if(e.liste_coup_possible(Jcurrent).size() == 1){
+            return e.liste_coup_possible(Jcurrent).get(0);
+        }
         for(String m : e.liste_coup_possible(Jcurrent)){
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
             value.put(m, MinMaxValue(p, J, Jcurrent, false, pmax));
+
+            // Rétablir le score des joueurs dans ce contexte
+            J[0].score = scoreState[0];
+            J[1].score = scoreState[1];
+            if(Jcurrent.consulter_id() == J[0].consulter_id()) Jcurrent.score = J[0].consulter_score();
+            else Jcurrent.score = J[1].consulter_score();
         }
 
         if(Jcurrent.consulter_id() == 1){
@@ -278,6 +357,17 @@ public class Plateau implements I_plateau{
         }
     }
 
+    public void ordinateurMinMax1(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 10001);
+            System.out.print("Ordinateur" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
 
 
     public void afficher(Joueur[] joueurs){
