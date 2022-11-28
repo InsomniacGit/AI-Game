@@ -287,10 +287,10 @@ public class Plateau implements I_plateau{
         int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
 
         Joueur Jopponent;
-        if (J[0].consulter_id() != Jcurrent.consulter_id()){
-            Jopponent = J[0];
-        } else {
+        if (J[0].consulter_id() == Jcurrent.consulter_id()){
             Jopponent = J[1];
+        } else {
+            Jopponent = J[0];
         }
 
         if(!e.etat_enCours(J[0].consulter_score(), J[1].consulter_score())){
@@ -302,11 +302,19 @@ public class Plateau implements I_plateau{
         if ((pmax == 0) && (e.etat_enCours(J[0].consulter_score(), J[1].consulter_score()))) return evaluation(e, J);
 
         ArrayList<Integer> vals = new ArrayList<>();
+
+        //int debug;
         for(String m : e.liste_coup_possible(Jcurrent)){
+
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
             vals.add(MinMaxValue(p, J, Jopponent, !(isMax), pmax-1));
+
+            // debug = MinMaxValue(p, J, Jopponent, !(isMax), pmax-1);
+            // vals.add(debug);
+            // System.out.println("coup = " + m + " \t pmax = " + pmax + " \t nb := " + e.liste_coup_possible(Jcurrent).size() + " \t cp := " + e.liste_coup_possible(Jcurrent) + " \t value = " + debug);
+
 
             // Rétablir le score des joueurs dans ce contexte
             J[0].score = scoreState[0];
@@ -336,9 +344,11 @@ public class Plateau implements I_plateau{
         boolean isMax;
 
         if (J[0].consulter_id() != Jcurrent.consulter_id()){
+            // Jcurrent = J[1]
             Jopponent = J[0];
             isMax = false;
         } else {
+            // Jcurrent = J[0]
             Jopponent = J[1];
             isMax = true;
         }
@@ -352,19 +362,37 @@ public class Plateau implements I_plateau{
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
-            value.put(m, MinMaxValue(p, J, Jopponent, isMax, pmax));
+            value.put(m, MinMaxValue(p, J, Jopponent, !(isMax), pmax));
 
             // Rétablir le score des joueurs dans ce contexte
             J[0].score = scoreState[0];
             J[1].score = scoreState[1];
-            if(Jcurrent.consulter_id() == J[0].consulter_id()) Jcurrent.score = J[0].consulter_score();
-            else Jcurrent.score = J[1].consulter_score();
+            if(Jcurrent.consulter_id() == J[0].consulter_id()){
+                Jcurrent.score = J[0].consulter_score();
+                Jopponent.score = J[1].consulter_score();
+            }
+            else {
+                Jcurrent.score = J[1].consulter_score();
+                Jopponent.score = J[0].consulter_score();
+            }
         }
 
         if(Jcurrent.consulter_id() == 1){
             return maxCoup(value);
         } else {
             return minCoup(value);
+        }
+    }
+
+    public void ordinateurMinMax0(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionMinMax(this, J, joueur_current, 0);
+            System.out.print("MinMax" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
         }
     }
 
@@ -557,7 +585,7 @@ public class Plateau implements I_plateau{
 
         for(int i=0; i<this.taille_plateau/2; i++) {
             if(this.cases[i].graines_bleus >= 10) {
-                System.out.print("| " + ANSI_BLUE + this.cases[i].graines_bleus + "B" + ANSI_RESET);
+                System.out.print("| " + ANSI_BLUE + this.cases[i].graines_bleus + "B" + ANSI_RESET + " ");
             }
             else {
                 System.out.print("|  " + ANSI_BLUE + this.cases[i].graines_bleus + "B" + ANSI_RESET + " ");
@@ -590,7 +618,7 @@ public class Plateau implements I_plateau{
 
         for(int i=this.taille_plateau; i>this.taille_plateau/2; i--) {
             if(this.cases[i-1].graines_bleus >= 10) {
-                System.out.print("| " + ANSI_BLUE + this.cases[i-1].graines_bleus + "B" + ANSI_RESET);
+                System.out.print("| " + ANSI_BLUE + this.cases[i-1].graines_bleus + "B" + ANSI_RESET + " ");
             }
             else {
                 System.out.print("|  " + ANSI_BLUE + this.cases[i-1].graines_bleus + "B" + ANSI_RESET + " ");

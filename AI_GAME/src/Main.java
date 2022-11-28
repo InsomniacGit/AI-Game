@@ -49,6 +49,14 @@ public class Main {
                  plateau.ordinateurNaif(joueur_current, joueurs[(numCoup+1)%2]);
                  }*/
 
+                // Mode OrdinateurMinMax1 vs OrdinateurMinMax3
+                if(joueur_current.consulter_id() == 2){ // Si ==2, alors joueur2, sinon joueur1
+                 plateau.ordinateurMinMax6(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+                 }
+                 else{
+                 plateau.ordinateurMinMaxAdaptatif(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+                 }
+
                 // Mode OrdinateurMinMaxAdaptatif vs OrdinateurMinMax5
                 /**if (joueur_current.consulter_id() == 2) { // Si ==2, alors joueur2, sinon joueur1
                     long start = System.currentTimeMillis();
@@ -59,9 +67,9 @@ public class Main {
                 }*/
 
                 // Mode OrdinateurMinMaxAdaptatif vs OrdinateurMinMaxAdaptatif
-                long start = System.currentTimeMillis();
+                /**long start = System.currentTimeMillis();
                 plateau.ordinateurMinMaxAdaptatif(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
-                System.out.println("Run time : " + (System.currentTimeMillis() - start));
+                System.out.println("Run time : " + (System.currentTimeMillis() - start));*/
 
 
                 if (DEBUG) plateau.afficher(joueurs);
