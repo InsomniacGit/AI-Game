@@ -231,15 +231,21 @@ public class Plateau implements I_plateau{
     }
 
     public String minCoup(Map<String, Integer> tab){
-        int val = Integer.MAX_VALUE;
+        int val = 500;
         String ind = "";
 
         for(String m : tab.keySet()){
-            if(val > tab.get(m)){
-                val = tab.get(m);
+            if(ind == ""){
                 ind = m;
             }
+            else {
+                if (val > tab.get(m)) {
+                    val = tab.get(m);
+                    ind = m;
+                }
+            }
         }
+
         return ind;
     }
 
@@ -255,13 +261,18 @@ public class Plateau implements I_plateau{
     }
 
     public String maxCoup(Map<String, Integer> tab){
-        int val = Integer.MIN_VALUE;
+        int val = -500;
         String ind = "";
 
         for(String m : tab.keySet()){
-            if(val < tab.get(m)){
-                val = tab.get(m);
+            if(ind == ""){
                 ind = m;
+            }
+            else {
+                if (val < tab.get(m)) {
+                    val = tab.get(m);
+                    ind = m;
+                }
             }
         }
         return ind;
@@ -303,17 +314,12 @@ public class Plateau implements I_plateau{
 
         ArrayList<Integer> vals = new ArrayList<>();
 
-        //int debug;
         for(String m : e.liste_coup_possible(Jcurrent)){
 
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
             vals.add(MinMaxValue(p, J, Jopponent, !(isMax), pmax-1));
-
-            // debug = MinMaxValue(p, J, Jopponent, !(isMax), pmax-1);
-            // vals.add(debug);
-            // System.out.println("coup = " + m + " \t pmax = " + pmax + " \t nb := " + e.liste_coup_possible(Jcurrent).size() + " \t cp := " + e.liste_coup_possible(Jcurrent) + " \t value = " + debug);
 
 
             // Rétablir le score des joueurs dans ce contexte
@@ -359,10 +365,12 @@ public class Plateau implements I_plateau{
             return e.liste_coup_possible(Jcurrent).get(0);
         }
         for(String m : e.liste_coup_possible(Jcurrent)){
+
             Plateau p = new Plateau(this.taille_plateau);
             p.init_plateau(e); // copie dure du plateau e
             p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
             value.put(m, MinMaxValue(p, J, Jopponent, !(isMax), pmax));
+            // System.out.println(m + " " + value); // Affiche les coups possible et l'évaluation lié à ces coups
 
             // Rétablir le score des joueurs dans ce contexte
             J[0].score = scoreState[0];
@@ -518,50 +526,17 @@ public class Plateau implements I_plateau{
 
     public void ordinateurMinMaxAdaptatif(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
 
-        if(this.liste_coup_possible(joueur_current).size() <= 1){
-            this.ordinateurMinMax10(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 2){
-            this.ordinateurMinMax9(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 3){
+        if(this.liste_coup_possible(joueur_current).size() <= 2){
             this.ordinateurMinMax9(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 4){
             this.ordinateurMinMax8(joueur_current, J, joueur_precedent);
         }
-        else if(this.liste_coup_possible(joueur_current).size() <= 5){
-            this.ordinateurMinMax8(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 6){
-            this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
-        }
         else if(this.liste_coup_possible(joueur_current).size() <= 7){
             this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
         }
-        else if(this.liste_coup_possible(joueur_current).size() <= 8){
-            this.ordinateurMinMax7(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 9){
-            this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 10){
-            this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
-        }
         else if(this.liste_coup_possible(joueur_current).size() <= 11){
             this.ordinateurMinMax6(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 12){
-            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 13){
-            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 14){
-            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
-        }
-        else if(this.liste_coup_possible(joueur_current).size() <= 15){
-            this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 16){
             this.ordinateurMinMax5(joueur_current, J, joueur_precedent);

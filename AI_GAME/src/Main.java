@@ -51,7 +51,7 @@ public class Main {
 
                 // Mode OrdinateurMinMax1 vs OrdinateurMinMax3
                 if(joueur_current.consulter_id() == 2){ // Si ==2, alors joueur2, sinon joueur1
-                 plateau.ordinateurMinMax6(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
+                 plateau.ordinateurMinMax5(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
                  }
                  else{
                  plateau.ordinateurMinMaxAdaptatif(joueur_current, joueurs, joueurs[(numCoup+1)%2]);
