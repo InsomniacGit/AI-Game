@@ -5,6 +5,8 @@ public class Plateau implements I_plateau{
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final int MAXVAL = 1000;
     public Case[] cases;
     public boolean partie_en_cours;
     public int nombres_graines_plateau;
@@ -305,8 +307,8 @@ public class Plateau implements I_plateau{
         }
 
         if(!e.etat_enCours(J[0].consulter_score(), J[1].consulter_score())){
-            if (J[0].consulter_score() > J[1].consulter_score()) return 1000+pmax;
-            if (J[0].consulter_score() < J[1].consulter_score()) return -1000-pmax;
+            if (J[0].consulter_score() > J[1].consulter_score()) return MAXVAL+pmax;
+            if (J[0].consulter_score() < J[1].consulter_score()) return -MAXVAL-pmax;
             if (J[0].consulter_score() == J[1].consulter_score()) return 0;
         }
 
@@ -339,6 +341,73 @@ public class Plateau implements I_plateau{
             return maxInArray(vals);
         } else {
             return minInArray(vals);
+        }
+    }
+
+    public int AlphaBetaValue(Plateau e, Joueur[] J, Joueur Jcurrent, int alpha, int beta, boolean isMax, int pmax){
+        int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
+
+        Joueur Jopponent;
+        if (J[0].consulter_id() == Jcurrent.consulter_id()){
+            Jopponent = J[1];
+        } else {
+            Jopponent = J[0];
+        }
+
+        if(!e.etat_enCours(J[0].consulter_score(), J[1].consulter_score())){
+            if (J[0].consulter_score() > J[1].consulter_score()) return MAXVAL+pmax;
+            if (J[0].consulter_score() < J[1].consulter_score()) return -MAXVAL-pmax;
+            if (J[0].consulter_score() == J[1].consulter_score()) return 0;
+        }
+
+        if ((pmax == 0) && (e.etat_enCours(J[0].consulter_score(), J[1].consulter_score()))) return evaluation(e, J);
+
+        if(isMax){
+            for(String m : e.liste_coup_possible(Jcurrent)){
+
+                Plateau p = new Plateau(this.taille_plateau);
+                p.init_plateau(e); // copie dure du plateau e
+                p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
+
+                alpha = Math.max(alpha, AlphaBetaValue(p, J, Jopponent, alpha, beta, !(isMax), pmax-1));
+                if(alpha >= beta) return alpha;
+
+                // Rétablir le score des joueurs dans ce contexte
+                J[0].score = scoreState[0];
+                J[1].score = scoreState[1];
+                if(Jcurrent.consulter_id() == J[0].consulter_id()){
+                    Jcurrent.score = J[0].consulter_score();
+                    Jopponent.score = J[1].consulter_score();
+                }
+                else {
+                    Jcurrent.score = J[1].consulter_score();
+                    Jopponent.score = J[0].consulter_score();
+                }
+            }
+            return alpha;
+        } else {
+            for(String m : e.liste_coup_possible(Jcurrent)){
+
+                Plateau p = new Plateau(this.taille_plateau);
+                p.init_plateau(e); // copie dure du plateau e
+                p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
+
+                beta = Math.min(beta, AlphaBetaValue(p, J, Jopponent, alpha, beta, !(isMax), pmax-1));
+                if(beta <= alpha) return beta;
+
+                // Rétablir le score des joueurs dans ce contexte
+                J[0].score = scoreState[0];
+                J[1].score = scoreState[1];
+                if(Jcurrent.consulter_id() == J[0].consulter_id()){
+                    Jcurrent.score = J[0].consulter_score();
+                    Jopponent.score = J[1].consulter_score();
+                }
+                else {
+                    Jcurrent.score = J[1].consulter_score();
+                    Jopponent.score = J[0].consulter_score();
+                }
+            }
+            return beta;
         }
     }
 
@@ -390,6 +459,66 @@ public class Plateau implements I_plateau{
         } else {
             return minCoup(value);
         }
+    }
+
+    public String DecisionAlphaBeta (Plateau e, Joueur[] J, Joueur Jcurrent, int pmax) {
+        int[] scoreState = {J[0].consulter_score(), J[1].consulter_score() };
+
+        Joueur Jopponent;
+        boolean isMax;
+
+        if (J[0].consulter_id() != Jcurrent.consulter_id()){
+            Jopponent = J[0];
+            isMax = false;
+        } else {
+            Jopponent = J[1];
+            isMax = true;
+        }
+
+        String coup = e.liste_coup_possible(Jcurrent).get(0);
+        int val;
+        int alpha = -MAXVAL;
+        int beta = MAXVAL;
+
+        // Decide the best move of J in position e
+        System.out.println("nb := " + e.liste_coup_possible(Jcurrent).size() + " \t cp := " + e.liste_coup_possible(Jcurrent));
+        if(e.liste_coup_possible(Jcurrent).size() == 1){
+            return e.liste_coup_possible(Jcurrent).get(0);
+        }
+        for(String m : e.liste_coup_possible(Jcurrent)){
+
+            Plateau p = new Plateau(this.taille_plateau);
+            p.init_plateau(e); // copie dure du plateau e
+            p.capturer(p.semer(m), Jcurrent); // Apply(m, e)
+            val = AlphaBetaValue(p, J, Jopponent, alpha, beta, !(isMax), pmax);
+
+            // System.out.println(m + " " + value); // Affiche les coups possible et l'évaluation lié à ces coups
+
+            // Rétablir le score des joueurs dans ce contexte
+            J[0].score = scoreState[0];
+            J[1].score = scoreState[1];
+
+            if(Jcurrent.consulter_id() == J[0].consulter_id()){
+                Jcurrent.score = J[0].consulter_score();
+                Jopponent.score = J[1].consulter_score();
+
+                if(val > alpha){
+                    coup = m;
+                    alpha = val;
+                }
+            }
+            else {
+                Jcurrent.score = J[1].consulter_score();
+                Jopponent.score = J[0].consulter_score();
+
+                if(val < beta){
+                    coup = m;
+                    beta = val;
+                }
+            }
+        }
+
+        return coup;
     }
 
     public void ordinateurMinMax0(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
@@ -540,6 +669,86 @@ public class Plateau implements I_plateau{
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 16){
             this.ordinateurMinMax5(joueur_current, J, joueur_precedent);
+        }
+    }
+
+
+    public void ordinateurAlphaBeta5(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionAlphaBeta(this, J, joueur_current, 7);
+            System.out.print("AlphaBeta" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurAlphaBeta6(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionAlphaBeta(this, J, joueur_current, 8);
+            System.out.print("AlphaBeta" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurAlphaBeta7(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionAlphaBeta(this, J, joueur_current, 9);
+            System.out.print("AlphaBeta" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurAlphaBeta8(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionAlphaBeta(this, J, joueur_current, 10);
+            System.out.print("AlphaBeta" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurAlphaBeta9(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+        String coup;
+        int derniere_semance;
+
+        if (est_affame(joueur_current, joueur_precedent)) {
+            coup = DecisionAlphaBeta(this, J, joueur_current, 11);
+            System.out.print("AlphaBeta" + joueur_current.consulter_id() + " - Joue le coup : " + coup + "\n");
+            derniere_semance = semer(coup);
+            capturer(derniere_semance, joueur_current);
+        }
+    }
+
+    public void ordinateurAlphaBetaAdaptatif(Joueur joueur_current, Joueur[] J, Joueur joueur_precedent) {
+
+        if(this.liste_coup_possible(joueur_current).size() <= 2){
+            this.ordinateurAlphaBeta9(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 4){
+            this.ordinateurAlphaBeta8(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 7){
+            this.ordinateurAlphaBeta7(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 11){
+            this.ordinateurAlphaBeta6(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 16){
+            this.ordinateurAlphaBeta5(joueur_current, J, joueur_precedent);
         }
     }
 
