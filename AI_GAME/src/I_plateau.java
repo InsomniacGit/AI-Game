@@ -16,13 +16,13 @@ public interface I_plateau {
     /** Tour de jeu du joueur courant */
     void jouer(Joueur joueur_current, Joueur joueur_precedent);
     /** Tour de jeu du joueur courant s'il s'agit d'un bot */
-    void ordinateur(Joueur joueur_current, Joueur joueur_precedent);
+    void ordinateurNaif(Joueur joueur_current, Joueur joueur_precedent);
     /** Mise à jour des graines restantes sur le plateau */
     void actualisation_graines_restantes(int nombre_graine_capture);
     /** Connaitre le nombre de graines encore en jeu */
     int connaitre_graines_restantes();
     /** Connaitre l'état de la partie */
-    boolean etat_partie(int score_J1, int score_J2);
+    boolean etat_enCours(int score_J1, int score_J2);
     /** Connaitre résultat de la partie */
     void connaitre_vainqueur(Joueur j1, Joueur j2);
     /** Afficher le plateau de jeu */
