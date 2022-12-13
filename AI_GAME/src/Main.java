@@ -28,7 +28,7 @@ public class Main {
 
         while (plateau.etat_enCours(joueurs[0].consulter_score(), joueurs[1].consulter_score())) {
 
-            System.out.print("nbGraine := " + plateau.connaitre_graines_restantes() + " \t ");
+            System.out.print("nbGraine := " + plateau.connaitre_graines_restantes() + " \t Tour := " + numCoup + " \t ");
 
             Joueur joueur_current = joueurs[numCoup % 2];
 
@@ -79,7 +79,7 @@ public class Main {
              System.out.println("Run time : " + (System.currentTimeMillis() - start));*/
 
             // Mode OrdinateurMinMaxAdaptatif vs OrdinateurAlphaBetaAdaptatif
-            long time = 0;
+            /**long time = 0;
             long start = 0;
             if (joueur_current.consulter_id() == 2) { // Si ==2, alors joueur2, sinon joueur1
                 start = System.currentTimeMillis();
@@ -93,6 +93,20 @@ public class Main {
                 time = System.currentTimeMillis() - start;
                 System.out.println("Run time := " + (time) + " \t Tour := " + numCoup);
                 timeMinMax += time;
+            }*/
+
+            // Mode exam
+            long time = 0;
+            long start = 0;
+            if (joueur_current.consulter_id() == 2) { // Si ==2, alors joueur2, sinon joueur1
+                start = System.currentTimeMillis();
+                plateau.ordinateurAlphaBetaAdaptatif(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
+                time = System.currentTimeMillis() - start;
+                System.out.println("Run time := " + (time) + " \t Tour := " + numCoup);
+                timeAlpha += time;
+            }else{
+                System.out.println("nb := " + plateau.liste_coup_possible(joueur_current).size() + " \t cp := " + plateau.liste_coup_possible(joueur_current));
+                plateau.jouer(joueur_current, joueurs[(numCoup+1)%2]);
             }
 
             if (DEBUG) plateau.afficher(joueurs);

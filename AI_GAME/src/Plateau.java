@@ -1593,7 +1593,7 @@ public class Plateau implements I_plateau{
             this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 6){
-            this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
+            this.ordinateurAlphaBeta10(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 7){
             this.ordinateurAlphaBeta10(joueur_current, J, joueur_precedent);
