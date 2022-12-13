@@ -28,6 +28,8 @@ public class Main {
 
         while (plateau.etat_enCours(joueurs[0].consulter_score(), joueurs[1].consulter_score())) {
 
+            System.out.print("nbGraine := " + plateau.connaitre_graines_restantes() + " \t ");
+
             Joueur joueur_current = joueurs[numCoup % 2];
 
             // Mode 1v1
@@ -81,25 +83,26 @@ public class Main {
             long start = 0;
             if (joueur_current.consulter_id() == 2) { // Si ==2, alors joueur2, sinon joueur1
                 start = System.currentTimeMillis();
-                plateau.ordinateurAlphaBeta8(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
+                plateau.ordinateurAlphaBetaAdaptatif(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
                 time = System.currentTimeMillis() - start;
-                System.out.println("Run time : " + (time));
+                System.out.println("Run time := " + (time) + " \t Tour := " + numCoup);
                 timeAlpha += time;
             } else {
                 start = System.currentTimeMillis();
-                plateau.ordinateurMinMax4(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
+                plateau.ordinateurAlphaBetaAdaptatifRapide(joueur_current, joueurs, joueurs[(numCoup + 1) % 2]);
                 time = System.currentTimeMillis() - start;
-                System.out.println("Run time : " + (time));
+                System.out.println("Run time := " + (time) + " \t Tour := " + numCoup);
                 timeMinMax += time;
             }
 
             if (DEBUG) plateau.afficher(joueurs);
 
+
             numCoup++;
         }
 
-        System.out.println("Run time Alpha : " + (timeAlpha));
-        System.out.println("Run time Minimax : " + (timeMinMax));
+        System.out.println("Run time Alpha J1 : " + (timeAlpha));
+        System.out.println("Run time Alpha J2 : " + (timeMinMax));
 
 
         // Afficher vainqueur

@@ -1583,17 +1583,44 @@ public class Plateau implements I_plateau{
         if(this.liste_coup_possible(joueur_current).size() <= 2){
             this.ordinateurAlphaBeta12(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 3){
+            this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 4){
+            this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 5){
+            this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 6){
             this.ordinateurAlphaBeta11(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 7){
             this.ordinateurAlphaBeta10(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 8){
+            this.ordinateurAlphaBeta10(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 9){
+            this.ordinateurAlphaBeta10(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 10){
+            this.ordinateurAlphaBeta9(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 11){
             this.ordinateurAlphaBeta9(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 12){
+            this.ordinateurAlphaBeta8(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 13) {
+            this.ordinateurAlphaBeta8(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 14){
             this.ordinateurAlphaBeta8(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 15){
+            this.ordinateurAlphaBeta7(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 16){
             this.ordinateurAlphaBeta7(joueur_current, J, joueur_precedent);
@@ -1737,17 +1764,44 @@ public class Plateau implements I_plateau{
         if(this.liste_coup_possible(joueur_current).size() <= 2){
             this.ordinateurAlphaBeta12Rapide(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 3){
+            this.ordinateurAlphaBeta11Rapide(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 4){
+            this.ordinateurAlphaBeta11Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 5){
+            this.ordinateurAlphaBeta11Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 6){
             this.ordinateurAlphaBeta11Rapide(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 7){
             this.ordinateurAlphaBeta10Rapide(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 8){
+            this.ordinateurAlphaBeta10Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 9){
+            this.ordinateurAlphaBeta10Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 10){
+            this.ordinateurAlphaBeta9Rapide(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 11){
             this.ordinateurAlphaBeta9Rapide(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 12){
+            this.ordinateurAlphaBeta8Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 13) {
+            this.ordinateurAlphaBeta8Rapide(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 14){
             this.ordinateurAlphaBeta8Rapide(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 15){
+            this.ordinateurAlphaBeta7Rapide(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 16){
             this.ordinateurAlphaBeta7Rapide(joueur_current, J, joueur_precedent);
@@ -1891,17 +1945,44 @@ public class Plateau implements I_plateau{
         if(this.liste_coup_possible(joueur_current).size() <= 2){
             this.ordinateurAlphaBeta12Lent(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 3){
+            this.ordinateurAlphaBeta11Lent(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 4){
+            this.ordinateurAlphaBeta11Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 5){
+            this.ordinateurAlphaBeta11Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 6){
             this.ordinateurAlphaBeta11Lent(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 7){
             this.ordinateurAlphaBeta10Lent(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 8){
+            this.ordinateurAlphaBeta10Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 9){
+            this.ordinateurAlphaBeta10Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 10){
+            this.ordinateurAlphaBeta9Lent(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 11){
             this.ordinateurAlphaBeta9Lent(joueur_current, J, joueur_precedent);
         }
+        else if(this.liste_coup_possible(joueur_current).size() <= 12){
+            this.ordinateurAlphaBeta8Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 13) {
+            this.ordinateurAlphaBeta8Lent(joueur_current, J, joueur_precedent);
+        }
         else if(this.liste_coup_possible(joueur_current).size() <= 14){
             this.ordinateurAlphaBeta8Lent(joueur_current, J, joueur_precedent);
+        }
+        else if(this.liste_coup_possible(joueur_current).size() <= 15){
+            this.ordinateurAlphaBeta7Lent(joueur_current, J, joueur_precedent);
         }
         else if(this.liste_coup_possible(joueur_current).size() <= 16){
             this.ordinateurAlphaBeta7Lent(joueur_current, J, joueur_precedent);
